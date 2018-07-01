@@ -1,5 +1,3 @@
-// Always remember to install express, body-parser & ejs
-
 // initializing frameworks
 var express             = require("express"),
     app                 = express(),
@@ -19,12 +17,16 @@ var commentRoutes       = require("./routes/comments"),
     campgroundRoutes    = require("./routes/campgrounds"),
     indexRoutes         = require("./routes/index");
 
+console.log(process.env.DATABASEURL);
+
 // connecting to MongoDB
+mongoose.connect(process.env.DATABASEURL);
+
 // locally
 // mongoose.connect("mongodb://localhost/yelp_camp");
 
 // MongoLab
-mongoose.connect("mongodb://danny:l3hspu8oXR20HdBz@ds125021.mlab.com:25021/looptech");
+// mongoose.connect("mongodb://danny:l3hspu8oXR20HdBz@ds125021.mlab.com:25021/looptech");
 
 // executing bodyParser
 app.use(bodyParser.urlencoded({
