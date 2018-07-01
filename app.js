@@ -20,7 +20,11 @@ var commentRoutes       = require("./routes/comments"),
     indexRoutes         = require("./routes/index");
 
 // connecting to MongoDB
-mongoose.connect("mongodb://localhost/yelp_camp");
+// locally
+// mongoose.connect("mongodb://localhost/yelp_camp");
+
+// MongoLab
+mongoose.connect("mongodb://danny:l3hspu8oXR20HdBz@ds125021.mlab.com:25021/looptech");
 
 // executing bodyParser
 app.use(bodyParser.urlencoded({
