@@ -17,16 +17,14 @@ var commentRoutes       = require("./routes/comments"),
     campgroundRoutes    = require("./routes/campgrounds"),
     indexRoutes         = require("./routes/index");
 
+// check for environment variable
 console.log(process.env.DATABASEURL);
 
+// adding backup to environment variable not loading up
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp"
+
 // connecting to MongoDB
-mongoose.connect(process.env.DATABASEURL);
-
-// locally
-// mongoose.connect("mongodb://localhost/yelp_camp");
-
-// MongoLab
-// mongoose.connect("mongodb://danny:l3hspu8oXR20HdBz@ds125021.mlab.com:25021/looptech");
+mongoose.connect(url);
 
 // executing bodyParser
 app.use(bodyParser.urlencoded({
