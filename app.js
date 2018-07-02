@@ -82,8 +82,8 @@ app.use("/campgrounds/:id/comments",commentRoutes);
 // =============== LISTENER INITIALIZATION ================= \\
 
 // defaulting to localhost:3000 when running locally
-var port = process.env.PORT || 3000;
-var ip = process.env.IP || "localhost";
+var port = process.env.PORT
+var ip = process.env.IP
 
 // adding listener
 app.listen(port, ip, function(){
