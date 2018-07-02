@@ -80,7 +80,7 @@ app.use("/campgrounds/:id/comments",commentRoutes);
 
 // defaulting to local ports
 var port = process.env.PORT || 3000,
-    ip = process.env.IP || "localhost";
+    ip = process.env.IP;
 
 // adding listener
 app.listen(port, ip, function(){
