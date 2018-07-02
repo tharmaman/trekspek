@@ -1,6 +1,3 @@
-// initializing dotenv file
-require('dotenv').config();
-
 // initializing frameworks
 var express             = require("express"),
     app                 = express(),
@@ -81,12 +78,8 @@ app.use("/campgrounds/:id/comments",commentRoutes);
 
 // =============== LISTENER INITIALIZATION ================= \\
 
-// defaulting to localhost:3000 when running locally
-var port = process.env.PORT
-var ip = process.env.IP
-
 // adding listener
-app.listen(port, ip, function(){
+app.listen(process.env.PORT, process.env.IP, function(){
     console.log("YelpCamp Server Has Started!");
     console.log("Listening on: ");
     console.log(process.env.PORT);
