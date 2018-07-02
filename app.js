@@ -14,11 +14,11 @@ var express             = require("express"),
 
 // requiring routes
 var commentRoutes       = require("./routes/comments"),
-    campgroundRoutes    = require("./routes/campgrounds"),
+    trekRoutes          = require("./routes/treks"),
     indexRoutes         = require("./routes/index");
 
 // check for environment variable
-console.log(process.env.DATABASEURL);
+// console.log(process.env.DATABASEURL);
 
 // adding backup to environment variable not loading up
 var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
@@ -51,7 +51,7 @@ app.locals.moment = require('moment');
 
 // PASSPORT CONFIGURATION
 app.use(require("express-session")({
-    secret: "Once again Rusty wins cutest dog!",
+    secret: "Is the derivative share requirement indexed according to cost and percentage analysis?",
     resave: false,
     saveUninitialized: false
 }));
@@ -73,8 +73,8 @@ app.use(function(req, res, next){
 // use route files we required
 // adding shortere route declarations
 app.use("/",indexRoutes);
-app.use("/campgrounds", campgroundRoutes);      // takes campground routes and appends "/campgrounds"
-app.use("/campgrounds/:id/comments",commentRoutes);
+app.use("/treks", trekRoutes);      // takes trek routes and appends "/treks"
+app.use("/treks/:id/comments",commentRoutes);
 
 // =============== LISTENER INITIALIZATION ================= \\
 
@@ -84,7 +84,7 @@ var port = process.env.PORT || 3000,
 
 // adding listener
 app.listen(port, ip, function(){
-    console.log("YelpCamp Server Has Started!");
+    console.log("TrekSpek Server Has Started!");
     console.log("Listening on: ");
     console.log(port);
     console.log(ip);
