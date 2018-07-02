@@ -20,8 +20,14 @@ var commentRoutes       = require("./routes/comments"),
     campgroundRoutes    = require("./routes/campgrounds"),
     indexRoutes         = require("./routes/index");
 
+// check for environment variable
+console.log(process.env.DATABASEURL);
+
+// adding backup to environment variable not loading up
+var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
+
 // connecting to MongoDB
-mongoose.connect("mongodb://localhost/yelp_camp");
+mongoose.connect(url);
 
 // executing bodyParser
 app.use(bodyParser.urlencoded({
@@ -73,9 +79,16 @@ app.use("/",indexRoutes);
 app.use("/campgrounds", campgroundRoutes);      // takes campground routes and appends "/campgrounds"
 app.use("/campgrounds/:id/comments",commentRoutes);
 
-// =============== LISTENER INITIALIZATION =============== \\
+// =============== LISTENER INITIALIZATION ================= \\
+
+// defaulting to localhost:3000 when running locally
+var port = process.env.PORT || 3000;
+var ip = process.env.IP || "localhost";
 
 // adding listener
-app.listen(process.env.PORT, process.env.IP, function(){
+app.listen(port, ip, function(){
     console.log("YelpCamp Server Has Started!");
+    console.log("Listening on: ");
+    console.log(process.env.PORT);
+    console.log(process.env.IP);
 });
