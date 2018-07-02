@@ -1,4 +1,5 @@
-// Always remember to install express, body-parser & ejs
+// initializing dotenv file
+require('dotenv').config();
 
 // initializing frameworks
 var express             = require("express"),

@@ -1,7 +1,19 @@
 var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
-var middleware = require("../middleware")
+var middleware = require("../middleware");
+
+// initializing Google Geocoder
+var NodeGeocoder = require('node-geocoder');
+ 
+var options = {
+  provider: 'google',
+  httpAdapter: 'https',
+  apiKey: process.env.GEOCODER_API_KEY,
+  formatter: null
+};
+ 
+var geocoder = NodeGeocoder(options);
 
 // ================= CAMPGROUNDS ROUTES  ================= \\
 
@@ -36,12 +48,17 @@ router.post("/", middleware.isLoggedIn, function(req, res){
     // passing through geocoder
     geocoder.geocode(req.body.location, function(err, data){
         if (err || !data.length){
+            console.log(err);
             req.flash("error", "Invalid address");
             return res.redirect("back");
         }
+        // data returns an array with these attributes
         var lat = data[0].latitude;
         var lng = data[0].longitude;
+        // creates a better version of the address entered
         var location = data[0].formattedAddress;
+        
+        // create a newCAmpground to add to the db
         var newCampground = {
             name: name, 
             image: image, 
@@ -106,6 +123,7 @@ router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
       req.flash('error', 'Invalid address');
       return res.redirect('back');
     }
+    // adding to campground object these below properties
     req.body.campground.lat = data[0].latitude;
     req.body.campground.lng = data[0].longitude;
     req.body.campground.location = data[0].formattedAddress;
@@ -132,17 +150,5 @@ router.delete("/:id", middleware.checkCampgroundOwnership, function(req, res){
         }
     });
 });
-
-// GEOCODER
-var NodeGeocoder = require('node-geocoder');
- 
-var options = {
-  provider: 'google',
-  httpAdapter: 'https',
-  apiKey: process.env.GEOCODER_API_KEY,
-  formatter: null
-};
- 
-var geocoder = NodeGeocoder(options);
 
 module.exports = router;
