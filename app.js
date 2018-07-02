@@ -24,10 +24,10 @@ var commentRoutes       = require("./routes/comments"),
 console.log(process.env.DATABASEURL);
 
 // adding backup to environment variable not loading up
-var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
+// var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
 
 // connecting to MongoDB
-mongoose.connect(url);
+mongoose.connect("mongodb://danny:l3hspu8oXR20HdBz@ds125021.mlab.com:25021/looptech");
 
 // executing bodyParser
 app.use(bodyParser.urlencoded({
