@@ -1,3 +1,6 @@
+// initializing .dotenv for non production environments
+require('dotenv').config();
+
 // initializing frameworks
 var express             = require("express"),
     app                 = express(),
@@ -18,9 +21,9 @@ var commentRoutes       = require("./routes/comments"),
     indexRoutes         = require("./routes/index");
 
 // check for environment variable
-console.log(process.env.DATABASEURL);
+// console.log(process.env.DATABASEURL);
 
-// adding backup to environment variable not loading up
+// adding local mongodb default, saving mLab only for production
 var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp"
 
 // connecting to MongoDB
