@@ -1,3 +1,6 @@
+// initializing dotenv
+require('dotenv').config();
+
 // initializing frameworks
 var express             = require("express"),
     app                 = express(),
@@ -9,8 +12,7 @@ var express             = require("express"),
     methodOverride      = require("method-override"),
     Campground          = require("./models/campground"),
     Comment             = require("./models/comment"),
-    User                = require("./models/user"),
-    seedDB              = require("./seeds");
+    User                = require("./models/user");
 
 // requiring routes
 var commentRoutes       = require("./routes/comments"),
