@@ -60,7 +60,7 @@ router.get("/", function(req, res){
 router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, res){
 
     console.log(req.body.campground);
-    var default_image = "http://res.cloudinary.com/tharmaman/image/upload/v1530419064/samples/landscapes/nature-mountains.jpg"
+    var default_image = "/media/default.png"
     var image = req.body.image ? req.body.image : default_image;
     var name = req.body.name;
     var price = req.body.price;
@@ -84,18 +84,21 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
         var location = data[0].formattedAddress;
         
         // uploading image to cloudinary
-        cloudinary.uploader.upload(req.file.path, function(result){
+        cloudinary.v2.uploader.upload(req.file.path, function(result){
             if (err){
                 console.log(err);
                 req.flash("error", "Could not upload image")
             }
             // adding a secure cloudinary url for the image
             image = result.secure_url;
+            // adding a secure cloudinary url for the image
+            var imageId = result.public_id;
             
              // create a object to add to the db
             var newCampground = {
                 name: name, 
-                image: image, 
+                image: image,
+                image_id: imageId,
                 description: desc, 
                 author: author,
                 price: price,
@@ -154,8 +157,8 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, function(req, res){
 });
 
 
-// REST UPDATE- PUT
-router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
+// REST UPDATE- PUTrouter.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
+router.put("/:id", middleware.checkCampgroundOwnership, upload.single("image"), function(req, res){
   geocoder.geocode(req.body.location, function (err, data) {
     if (err || !data.length) {
       req.flash('error', 'Invalid address');
@@ -165,16 +168,48 @@ router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
     req.body.campground.lat = data[0].latitude;
     req.body.campground.lng = data[0].longitude;
     req.body.campground.location = data[0].formattedAddress;
-
-    Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, campground){
+    
+    // if new image is uploaded, delete current version
+    
+     Campground.findById(req.params.id, async function(err, campground){
         if(err){
             req.flash("error", err.message);
             res.redirect("back");
         } else {
-            req.flash("success","Successfully Updated Trek!");
-            res.redirect("/treks/" + campground._id);
+            if (req.file) {
+              try {
+                  await cloudinary.v2.uploader.destroy(campground.imageId);
+                  var result = await cloudinary.v2.uploader.upload(req.file.path);
+                  req.body.campground.imageId = result.public_id;
+                  req.body.campground.image = result.secure_url;
+              } catch(err) {
+                  req.flash("error", err.message);
+                  return res.redirect("back");
+              }
+            }
+            console.log("===================");
+            console.log("campground imageID:");
+            console.log(req.body.imageId);
+            
+            console.log("===================")
+            console.log("campground image:")
+            console.log(req.body.image);
+            
+            console.log("===================");
+            console.log("campground object:");
+            console.log(req.body.campground);
+            
+            Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, campground){
+                if(err){
+                    req.flash("error", err.message);
+                    res.redirect("back");
+                } else {
+                    req.flash("success","Successfully Updated!");
+                    res.redirect("/treks/" + campground._id);
+                }
+            });
         }
-    });
+     });
   });
 });
 
