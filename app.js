@@ -10,7 +10,7 @@ var express             = require("express"),
     passport            = require("passport"),
     LocalStrategy       = require("passport-local"),
     methodOverride      = require("method-override"),
-    Campground          = require("./models/campground"),
+    Trek                = require("./models/trek"),
     Comment             = require("./models/comment"),
     User                = require("./models/user");
 
@@ -23,7 +23,7 @@ var commentRoutes       = require("./routes/comments"),
 // console.log(process.env.DATABASEURL);
 
 // adding backup to environment variable not loading up
-var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp";
+var url = process.env.DATABASEURL || "mongodb://localhost/trek_spek";
 
 // connecting to MongoDB
 mongoose.connect(url);

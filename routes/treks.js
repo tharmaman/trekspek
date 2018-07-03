@@ -1,7 +1,7 @@
 // Initializing frameworks
 var express = require("express");
 var router = express.Router();
-var Campground = require("../models/campground");
+var Trek = require("../models/trek");
 var middleware = require("../middleware");
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -37,29 +37,29 @@ var options = {
  
 var geocoder = NodeGeocoder(options);
 
-// ================= CAMPGROUNDS ROUTES  ================= \\
+// ================= TREKS ROUTES  ================= \\
 
-// REST INDEX - show all campgrounds from database 
+// REST INDEX - show all treks from database 
 router.get("/", function(req, res){
     // req.user        // contain username and id of user, undefined if no one signed in
-    // get all campgrounds from DB
-    Campground.find({}, function(err, allCampgrounds){
+    // get all treks from DB
+    Trek.find({}, function(err, allTreks){
         if(err){
             console.log("Damn shawty we hit an error");
             console.log(err);
         } else {
-            // console.log("HERE ARE ALL THE CAMPGROUNDS!!");
-            // console.log(allCampgrounds);
-            // render campgrounds
-            res.render("treks/index", {campgrounds:allCampgrounds, page: 'treks'});
+            // console.log("HERE ARE ALL THE TREKS!!");
+            // console.log(allTreks);
+            // render treks
+            res.render("treks/index", {treks:allTreks, page: 'treks'});
         }
     });
 });
 
-// REST CREATE - add new campgrounds to database 
+// REST CREATE - add new treks to database 
 router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, res){
 
-    console.log(req.body.campground);
+    console.log(req.body.trek);
     var default_image = "http://res.cloudinary.com/tharmaman/image/upload/v1530419064/samples/landscapes/nature-mountains.jpg"
     var image = req.body.image ? req.body.image : default_image;
     var name = req.body.name;
@@ -93,7 +93,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
             image = result.secure_url;
             
              // create a object to add to the db
-            var newCampground = {
+            var newTrek = {
                 name: name, 
                 image: image, 
                 description: desc, 
@@ -104,13 +104,13 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
                 lng: lng
             };
             
-            // creating new campground document to store in DB
-            Campground.create(newCampground, function(err, campground) {
+            // creating new trek document to store in DB
+            Trek.create(newTrek, function(err, trek) {
             if (err) {
                 req.flash('error', err.message);
                 return res.redirect('back');
             } else {
-                console.log(campground);
+                console.log(trek);
                 req.flash("success", "Successfully Added Trek!");
                 res.redirect('/treks/');
             }
@@ -120,67 +120,67 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
     });
 });
 
-// REST NEW - show form to create new campgrounds
+// REST NEW - show form to create new treks
 router.get("/new", middleware.isLoggedIn, function(req, res){
     res.render("treks/new");
 });
 
 // be aware of order, :id goes after the specific /new
 
-// REST SHOW - show detailed info about single campground
+// REST SHOW - show detailed info about single trek
 router.get("/:id", function(req, res){
-    // find campground with provided ID
+    // find trek with provided ID
     // passing actual comments need to use .populate then .exec
-    // finding campground by ID, then populate comments and then execute query
-    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
-        if(err || !foundCampground){
+    // finding trek by ID, then populate comments and then execute query
+    Trek.findById(req.params.id).populate("comments").exec(function(err, foundTrek){
+        if(err || !foundTrek){
             req.flash("error", "Trek not found");
             res.redirect("back");
             console.log(err);
         } else {
-            console.log(foundCampground);
-            // render show template with said campground
-            res.render("treks/show", {campground: foundCampground});
+            console.log(foundTrek);
+            // render show template with said trek
+            res.render("treks/show", {trek: foundTrek});
         }
     });
 });
 
 // REST EDIT - GET
-router.get("/:id/edit", middleware.checkCampgroundOwnership, function(req, res){
+router.get("/:id/edit", middleware.checkTrekOwnership, function(req, res){
         // error checking is redundant because otherwise middleware would return error
-        Campground.findById(req.params.id, function(err, foundCampground){
-            res.render("treks/edit", {campground: foundCampground});
+        Trek.findById(req.params.id, function(err, foundTrek){
+            res.render("treks/edit", {trek: foundTrek});
     });
 });
 
 
 // REST UPDATE- PUT
-router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
+router.put("/:id", middleware.checkTrekOwnership, function(req, res){
   geocoder.geocode(req.body.location, function (err, data) {
     if (err || !data.length) {
       req.flash('error', 'Invalid address');
       return res.redirect('back');
     }
-    // adding to campground object these below properties
-    req.body.campground.lat = data[0].latitude;
-    req.body.campground.lng = data[0].longitude;
-    req.body.campground.location = data[0].formattedAddress;
+    // adding to trek object these below properties
+    req.body.trek.lat = data[0].latitude;
+    req.body.trek.lng = data[0].longitude;
+    req.body.trek.location = data[0].formattedAddress;
 
-    Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, campground){
+    Trek.findByIdAndUpdate(req.params.id, req.body.trek, function(err, trek){
         if(err){
             req.flash("error", err.message);
             res.redirect("back");
         } else {
             req.flash("success","Successfully Updated Trek!");
-            res.redirect("/treks/" + campground._id);
+            res.redirect("/treks/" + trek._id);
         }
     });
   });
 });
 
 // REST DESTROY - DELETE
-router.delete("/:id", middleware.checkCampgroundOwnership, function(req, res){
-    Campground.findByIdAndRemove(req.params.id, function(err){
+router.delete("/:id", middleware.checkTrekOwnership, function(req, res){
+    Trek.findByIdAndRemove(req.params.id, function(err){
         if(err){
             res.redirect("/treks");
         } else {

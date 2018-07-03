@@ -1,6 +1,6 @@
 var express = require("express");
-var router = express.Router({mergeParams: true});       // merge params from campground and comments
-var Campground = require("../models/campground");
+var router = express.Router({mergeParams: true});       // merge params from trek and comments
+var Trek = require("../models/trek");
 var Comment = require("../models/comment")
 var middleware = require("../middleware")
 
@@ -8,12 +8,12 @@ var middleware = require("../middleware")
 
 // NEW
 router.get("/new", middleware.isLoggedIn, function(req,res){
-    // find campground by id
-    Campground.findById(req.params.id, function(err, campground){
+    // find trek by id
+    Trek.findById(req.params.id, function(err, trek){
         if(err){
             console.log(err);
         } else {
-            res.render("comments/new", {campground:campground});
+            res.render("comments/new", {trek:trek});
         }
     });
 });
@@ -21,9 +21,9 @@ router.get("/new", middleware.isLoggedIn, function(req,res){
 
 // CREATE
 router.post("/", function(req, res){
-    // lookup campground using ID
+    // lookup trek using ID
     console.log(req.params.id)
-    Campground.findById(req.params.id, function(err, campground){
+    Trek.findById(req.params.id, function(err, trek){
        if (err){
            console.log(err);
            res.redirect("/treks");
@@ -38,11 +38,11 @@ router.post("/", function(req, res){
                    comment.author.username = req.user.username;
                    //   save comment
                    comment.save();
-                   campground.comments.push(comment);
-                   campground.save();
+                   trek.comments.push(comment);
+                   trek.save();
                    console.log(comment);
                    req.flash("success", "Successfully added comment");
-                   res.redirect("/treks/" + campground._id);
+                   res.redirect("/treks/" + trek._id);
                }
            })
        }
@@ -51,8 +51,8 @@ router.post("/", function(req, res){
 
 // EDIT
 router.get("/:comment_id/edit", middleware.checkCommentOwnership, function(req, res){
-    Campground.findById(req.params.id, function(err, foundCampground) {
-        if (err || !foundCampground){
+    Trek.findById(req.params.id, function(err, foundTrek) {
+        if (err || !foundTrek){
             req.flash("error", "No Trek found");
             return res.redirect("back");
         }
@@ -60,14 +60,14 @@ router.get("/:comment_id/edit", middleware.checkCommentOwnership, function(req, 
             if (err) {
                 res.redirect("back");
             } else {
-                res.render("comments/edit", {campground_id: req.params.id, comment: foundComment});
+                res.render("comments/edit", {trek_id: req.params.id, comment: foundComment});
             }
         });
     })
 });
 
 // UPDATE
-// /campground/:id/comments/:comment_id
+// /trek/:id/comments/:comment_id
 
 router.put("/:comment_id", middleware.checkCommentOwnership, function(req, res){
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
