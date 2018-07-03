@@ -3,7 +3,7 @@
     <div class="row">
         <h1 style="text-align: center;">Edit <%=trek.name%></h1>
         <div style="width: 30%; margin: 25px auto;">
-            <form action="/treks/<%= trek._id %>?_method=PUT", method="POST">
+            <form action="/treks/<%= trek._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <input class="form-control" type="text" name="trek[name]" value="<%= trek.name %>">
                 </div>
@@ -11,7 +11,8 @@
                     <input class="form-control" type="number" name="trek[price]" value="<%= trek.price %>" min="0.01" step="0.01">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="trek[image]" value="<%= trek.image %>">
+                    <label for="image">Image</label>
+                    <input type="file" id="image" name="image" accept="image/*" required>
                 </div>
                 <div class="form-group">
                     <label for="location">Location</label>

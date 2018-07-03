@@ -155,26 +155,50 @@ router.get("/:id/edit", middleware.checkTrekOwnership, function(req, res){
 
 
 // REST UPDATE- PUT
-router.put("/:id", middleware.checkTrekOwnership, function(req, res){
-  geocoder.geocode(req.body.location, function (err, data) {
-    if (err || !data.length) {
-      req.flash('error', 'Invalid address');
-      return res.redirect('back');
-    }
-    // adding to trek object these below properties
-    req.body.trek.lat = data[0].latitude;
-    req.body.trek.lng = data[0].longitude;
-    req.body.trek.location = data[0].formattedAddress;
-
-    Trek.findByIdAndUpdate(req.params.id, req.body.trek, function(err, trek){
-        if(err){
-            req.flash("error", err.message);
-            res.redirect("back");
-        } else {
-            req.flash("success","Successfully Updated Trek!");
-            res.redirect("/treks/" + trek._id);
+router.put("/:id", middleware.checkTrekOwnership, upload.single('image'), function(req, res){
+    geocoder.geocode(req.body.location, function (err, data) {
+        console.log("================");
+        console.log("req.body")
+        console.log(req.body);
+        
+        console.log("================");
+        console.log("req.body.location")
+        console.log(req.body.location);
+          
+        if (err || !data.length) {
+          req.flash('error', 'Invalid address');
+          return res.redirect('back');
         }
-    });
+        // adding to trek object these below properties
+        req.body.trek.lat = data[0].latitude;
+        req.body.trek.lng = data[0].longitude;
+        req.body.trek.location = data[0].formattedAddress;
+        console.log("================");
+        console.log("geo")
+        console.log(req.body.trek.lat);
+        console.log(req.body.trek.lng);
+        console.log(req.body.trek.location);
+        
+        // uploading image to cloudinary
+        cloudinary.uploader.upload(req.file.path, function(result){
+            if (err){
+                console.log(err);
+                req.flash("error", "Could not upload image")
+            }
+            // adding a secure cloudinary url for the image
+            req.body.trek.image = result.secure_url;
+            
+            // updating database
+            Trek.findByIdAndUpdate(req.params.id, req.body.trek, function(err, trek){
+                if(err){
+                    req.flash("error", err.message);
+                    res.redirect("back");
+                } else {
+                    req.flash("success","Successfully Updated Trek!");
+                    res.redirect("/treks/" + trek._id);
+                }
+            });
+        });   
   });
 });
 
