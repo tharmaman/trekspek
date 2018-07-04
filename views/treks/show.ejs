@@ -29,7 +29,7 @@
                     <h4><a><%= trek.name %></a></h4>
                     <p><%= trek.description %> </p>
                     <p>
-                        <em>Submitted By: <%= trek.author.username %>, <%= moment(trek.createdAt).fromNow() %> </em> 
+                        <em>Submitted By: <a href="/profiles/<%=trek.author.username%>"> <%= trek.author.username %> </a>, <%= moment(trek.createdAt).fromNow() %> </em> 
                     </p>
                     <% if(currentUser && trek.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
                         <a class="btn btn-warning" href="/treks/<%= trek._id %>/edit">Edit</a>

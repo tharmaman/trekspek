@@ -1,0 +1,27 @@
+<% include ../partials/header %>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <h3 align="middle"><%=profile.username%></h3>
+            <img src="<%= profile.avatar %>" alt="user profile image">
+            <div align="middle" class="caption"> <%=profile.firstName%> <%=profile.lastName%> </div>
+            <div align="middle" class="caption"><a  href="mailto:<%=profile.email%>"><%=profile.email%></a></div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3>Recent Treks</h3>
+        <ul>
+         <% treks.forEach(function(trek) { %>
+            <li>
+                <a href="/treks/<%= trek.id %>">
+                    <%= trek.name %>
+                </a>
+            </li>
+        <%  }); %>
+        </ul>
+    </div>
+</div>
+
+
+<% include ../partials/footer %>
