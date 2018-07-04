@@ -14,7 +14,18 @@
             <div class="thumbnail">
                 <img class="img-responsive" src="<%= trek.image %>">
                 <div class="caption-full">
-                    <h4 class="pull-right">$<%=trek.price%>/night</h4>
+                    <div class="pull-right ratings-show">
+                        <% for (var i = 0; i < trek.rating; i++) { %>
+                            <span class="star-full">
+                              <i class="fas fa-star"></i>
+                            </span>
+                    <%  }   %>
+                        <% for (var i = 0; i < (5 - trek.rating); i++) { %>
+                            <span class="star-empty">
+                              <i class="far fa-star"></i>
+                            </span>
+                    <%  }   %>
+                    </div>
                     <h4><a><%= trek.name %></a></h4>
                     <p><%= trek.description %> </p>
                     <p>

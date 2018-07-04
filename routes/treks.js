@@ -60,10 +60,13 @@ router.get("/", function(req, res){
 router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, res){
 
     console.log(req.body.trek);
-    var default_image = "http://res.cloudinary.com/tharmaman/image/upload/v1530419064/samples/landscapes/nature-mountains.jpg"
+    var default_image = "/media/default.png";
     var image = req.body.image ? req.body.image : default_image;
     var name = req.body.name;
-    var price = req.body.price;
+    var rating = req.body.rating;
+    console.log("================");
+    console.log("Rating:");
+    console.log(rating);
     var desc = req.body.description;
     var author = {
         id: req.user._id,
@@ -98,7 +101,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
                 image: image, 
                 description: desc, 
                 author: author,
-                price: price,
+                rating: rating,
                 location: location,
                 lat: lat,
                 lng: lng

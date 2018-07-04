@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
 var trekSchema = new mongoose.Schema({
    name: String,
    image: String,
-   price: String,
+   rating: String,
    description: String,
    location: String,
    lat: Number,

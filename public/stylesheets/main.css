@@ -1,3 +1,68 @@
+.ratings-show {
+    margin-right: 1.8%;
+    margin-top: 0.06vh;
+    margin-bottom: 0.2vh;
+    font-size: 18px;
+    font-size: 4vh;
+}
+
+.star-full {
+    color: #fd0;
+}
+
+.star-empty {
+    color: #101010;
+}
+
+.rating {
+    transform: rotateY(180deg);
+    position: absolute;
+    margin-bottom: 10%;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    display: inline-block;
+    cursor: pointer;
+    width: 4.5vh;
+}
+
+.rating label:before {
+    content: '\f005';
+    font-family: 'Font Awesome 5 Free';
+    position: relative;
+    display: block;
+    font-size: 40px;
+    font-size: 4vh;
+    color: #101010;
+    font-weight: 200;
+}
+
+.rating label:after {
+    content: '\f005';
+    font-family: 'Font Awesome 5 Free';
+    position: absolute;
+    display: block;
+    color: #fd0;
+    font-weight: 900;
+    font-size: 40px;
+    font-size: 4vh;
+    top: 0;
+    opacity: 0;
+    transition: .5s;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+}
+
+.rating label:hover:after,
+.rating label:hover ~ label:after,
+.rating input:checked ~ label:after
+{
+    opacity: 1;
+}
+
 .thumbnail img {
     width: 100%;
 }
@@ -12,6 +77,12 @@
 
 .delete-form{
     display: inline;
+}
+
+
+#ratediv {
+    position: relative;
+    margin-bottom: 10vh;
 }
 
 /* Google Maps */
