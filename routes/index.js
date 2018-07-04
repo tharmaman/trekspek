@@ -23,6 +23,9 @@ router.get("/register", function(req, res){
 // handle sign up logic
 router.post("/register", function(req, res){
     var newUser = new User({username: req.body.username});
+    if(req.body.adminCode == process.env.ADMIN_SECRET) {
+        newUser.isAdmin = true;
+    }
     User.register(newUser, req.body.password, function(err, user){
         if(err){
             console.log(err);
@@ -46,7 +49,9 @@ router.get("/login", function(req, res){
 router.post("/login", passport.authenticate("local", 
     {
         successRedirect:"/treks",
-        failureRedirect:"/login"
+        failureRedirect:"/login",
+        successFlash: "Welcome back ",
+        failureFlash: true
     }), function(req, res){
 });
 

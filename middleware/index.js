@@ -16,7 +16,7 @@ middlewareObj.checkTrekOwnership = function (req, res, next){
                 // console.log(foundTrek.author.id);
                 // console.log(req.user._id);
                 // needs to use .equals() because one is string other is object
-                if(foundTrek.author.id.equals(req.user._id)){
+                if(foundTrek.author.id.equals(req.user._id) || req.user.isAdmin){
                     next();
                 } else {
                     req.flash("error", "You don't have permission to do that!");
@@ -40,7 +40,7 @@ middlewareObj.checkCommentOwnership = function (req, res, next){
             } else {
                 // does user own comment?
                 // needs to use .equals() because one is string other is object
-                if(foundComment.author.id.equals(req.user._id)){
+                if(foundComment.author.id.equals(req.user._id) || req.user.isAdmin){
                     next();
                 } else {
                     req.flash("error", "You don't have permission to do that")
