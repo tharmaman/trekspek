@@ -18,21 +18,21 @@
                 <div class="form-group" id="ratediv">
                     <label for="rating">Rating</label>
                     <div class="rating">
-                        <input type="radio" name="trek[rating]" id="star5" value="5"><label for="star5">
+                        <input type="radio" name="trek[rating]" id="star5" value="5" <% if(trek.rating==5){ %> checked="checked" <% } %>><label for="star5">
                         </label>
-                        <input type="radio" name="trek[rating]" id="star4" value="4"><label for="star4">
+                        <input type="radio" name="trek[rating]" id="star4" value="4" <% if(trek.rating==4){ %> checked="checked" <% } %>><label for="star4">
                         </label>
-                        <input type="radio" name="trek[rating]" id="star3" value="3"><label for="star3">
+                        <input type="radio" name="trek[rating]" id="star3" value="3" <% if(trek.rating==3){ %> checked="checked" <% } %>><label for="star3">
                         </label>
-                        <input type="radio" name="trek[rating]" id="star2" value="2"><label for="star2">
+                        <input type="radio" name="trek[rating]" id="star2" value="2" <% if(trek.rating==2){ %> checked="checked" <% } %>><label for="star2">
                         </label>
-                        <input type="radio" name="trek[rating]" id="star1" value="1"><label for="star1">
+                        <input type="radio" name="trek[rating]" id="star1" value="1" <% if(trek.rating==1){ %> checked="checked" <% } %>><label for="star1">
                         </label>
                     </div>
                 </div>
                 <div class="form-group textbox">
                     <label for="description">Experience</label>
-                    <textarea rows="4" class="form-control" type="text" name="trek[description]" value="<%= trek.description %>" required></textarea>
+                    <textarea rows="4" class="form-control" type="text" name="trek[description]" required><%= trek.description %></textarea>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-lg btn-primary btn-block">Submit!</button>
@@ -41,5 +41,11 @@
             <a href="/treks">Go back</a>
         </div>
     </div>
+
+    <%  for (var i = 1; i <= 5; i++){ %>
+         <% if (trek.rating === i){ %>
+            <%    document.getElementById('star'+i).checked=true; %>
+         <%   } %>
+    <%    }; %>
 
 <% include ../partials/footer %>

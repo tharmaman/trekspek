@@ -80,7 +80,7 @@ router.post("/register", upload.single('avatar'), function(req, res){
                     return res.render("register", {error: err.message});  // return gets out of entire callback
                 } else {
                     passport.authenticate("local")(req, res, function(){
-                        req.flash("success", "Catch you on the backcountry " + user.username +"!");
+                        req.flash("success", "Adventure awaits you " + user.username +"!");
                         res.redirect("/treks");
                     });
                 }
