@@ -5,16 +5,31 @@
             <h1 id="main-text">Welcome To TrekSpek</h1>
             <p> View the top Treks from all over the world </p>
             <p>
-                <a href="/treks/new" class="btn btn-primary btn-lg">Add A New Trek</a>
+                <a id="add" href="/treks/new" class="btn btn-primary btn-lg">Add A New Trek</a>
             </p>
         </div>
     </header>
     
-    <div class="row">
-        <div class="col-lg-12">
-            <h3>Our Most Popular Treks!</h3>
+    <div class="row text-left" >
+        <div class="col-md-12">
+            <p>
+                <form action="/treks" method="GET" class="form-inline">
+                    <div>
+                        <input id="search" type="text" name="search" placeholder="Find treks by name, location, author..." class="form-control">
+                        <input type="submit" value="Search" class="btn btn-default">
+                    </div>
+                </form>
+            </p>
         </div>
     </div>
+    
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <h3><%=display%><h3>
+        </div>
+    </div>
+
     
     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <% treks.forEach(function(trek){ %>

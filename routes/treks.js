@@ -42,19 +42,35 @@ var geocoder = NodeGeocoder(options);
 
 // REST INDEX - show all treks from database 
 router.get("/", function(req, res){
-    // req.user        // contain username and id of user, undefined if no one signed in
-    // get all treks from DB
-    Trek.find({}, function(err, allTreks){
-        if(err){
-            console.log("Damn shawty we hit an error");
-            console.log(err);
-        } else {
-            // console.log("HERE ARE ALL THE TREKS!!");
-            // console.log(allTreks);
-            // render treks
-            res.render("treks/index", {treks:allTreks, page: 'treks'});
-        }
-    });
+    var display = "Our Most Popular Treks!";
+    if(req.query.search){
+        display = req.query.search +" Results:";
+        // get search treks from DB
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        
+        Trek.find( { $or: [ {name: regex}, {location: regex}, {'author.username': regex } ]}, function(err, searchTreks){
+            if(err){
+                console.log("Damn shawty we hit an error");
+                console.log(err);
+            } else {
+                if(searchTreks.length < 1) {
+                    display = "No results match that query, please try again.";
+                }
+                res.render("treks/index", {treks: searchTreks, display: display, page: 'treks'});
+            }
+        });
+        
+    } else {
+        // get all treks from DB
+        Trek.find({}, function(err, allTreks){
+            if(err){
+                console.log("Damn shawty we hit an error");
+                console.log(err);
+            } else {
+                res.render("treks/index", {treks:allTreks, display: display, page: 'treks'});
+            }
+        });
+    }
 });
 
 // REST CREATE - add new treks to database 
@@ -209,5 +225,9 @@ router.delete("/:id", middleware.checkTrekOwnership, function(req, res){
         }
     });
 });
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;
