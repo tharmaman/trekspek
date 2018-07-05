@@ -42,6 +42,7 @@ router.get("/register", function(req, res){
    res.render("register", {page: 'register'}); 
 });
 
+// may want to refactor later to avoid callback hell
 // handle sign up logic
 router.post("/register", upload.single('avatar'), function(req, res){
         // declaring new object, saving out password
@@ -52,23 +53,39 @@ router.post("/register", upload.single('avatar'), function(req, res){
             email: req.body.email,
             avatar: req.body.avatar
         });
-        cloudinary.uploader.upload(req.file.path, function(result){
-            
-            // adding a secure cloudinary url for the image
-            newUser.avatar = result.secure_url;
+        // if image is uploaded (req.file.path)
+        if (req.file){
+            cloudinary.uploader.upload(req.file.path, function(result){
+                // adding a secure cloudinary url for the image
+                newUser.avatar = result.secure_url;
+                // passing through for auth
+                User.register(newUser, req.body.password, function(err, user){
+                    if(err){
+                        console.log(err);
+                        return res.render("register", {error: err.message});  // return gets out of entire callback
+                    } else {
+                        passport.authenticate("local")(req, res, function(){
+                            req.flash("success", "Catch you on the backcountry " + user.username +"!");
+                            res.redirect("/treks");
+                        });
+                    }
+                });
+            });
+        // else revert to default image
+        } else {
             // passing through for auth
             User.register(newUser, req.body.password, function(err, user){
-            if(err){
-                console.log(err);
-                return res.render("register", {error: err.message});  // return gets out of entire callback
-            } else {
-                passport.authenticate("local")(req, res, function(){
-                    req.flash("success", "Welcome to TrekSpek " + user.username);
-                    res.redirect("/treks");
-                });
-            }
-        });
-    });
+                if(err){
+                    console.log(err);
+                    return res.render("register", {error: err.message});  // return gets out of entire callback
+                } else {
+                    passport.authenticate("local")(req, res, function(){
+                        req.flash("success", "Catch you on the backcountry " + user.username +"!");
+                        res.redirect("/treks");
+                    });
+                }
+            });
+        }
 });
 
 // show login form

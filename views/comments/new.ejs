@@ -5,13 +5,13 @@
         <div style="width: 30%; margin: 25px auto;">
             <form action="/treks/<%= trek._id %>/comments", method="POST">
                 <div class="form-group">
-                    <input class="form-control" type="text" placeholder="text" name="comment[text]">
+                    <textarea class="form-control" rows="4" name="comment[text]"> </textarea>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-lg btn-primary btn-block">Submit!</button>
                 </div>
             </form>
-            <a href="/treks">Go back</a>
+            <a href="javascript:history.back()">Go back</a>
         </div>
     </div>
 

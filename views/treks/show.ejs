@@ -1,12 +1,13 @@
 <% include ../partials/header %>
-
+    
     <div class="row">
         <div class="col-md-3">
             <p class="lead">TrekSpek</p>
             <div class="list-group">
-                <li class="list-group-item active">Info 1</li>
-                <li class="list-group-item">Info 2</li>
-                <li class="list-group-item">Info 3</li>
+                <!--add listener later on-->
+                <li class="list-group-item active">Info</li>
+                <li class="list-group-item">Website</li>
+                <li class="list-group-item">Contact</li>
             </div>
             <div id="map"></div>
         </div>
@@ -29,7 +30,11 @@
                     <h4><a><%= trek.name %></a></h4>
                     <p><%= trek.description %> </p>
                     <p>
-                        <em>Submitted By: <a href="/profiles/<%=trek.author.username%>"> <%= trek.author.username %> </a>, <%= moment(trek.createdAt).fromNow() %> </em> 
+                        <em> 
+                            <a href="/profiles/<%=trek.author.username%>"> 
+                                <span class="dot" style="background-image:url('<%=user.avatar%>')"></span> <%= trek.author.username %> 
+                            </a>, <%= moment(trek.createdAt).fromNow() %> 
+                        </em> 
                     </p>
                     <% if(currentUser && trek.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
                         <a class="btn btn-warning" href="/treks/<%= trek._id %>/edit">Edit</a>
@@ -49,13 +54,15 @@
                 <% trek.comments.forEach(function(comment){ %>
                     <div class="row">
                         <div class="col-md-12">
-                            <strong><%= comment.author.username %></strong>
+                            <a href="/profiles/<%=trek.author.username%>">
+                                <strong><span class="dot" style="background-image:url('<%=user.avatar%>')"></span> <%= comment.author.username %></strong>
+                            </a>
                             <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
                             <p>
                                 <%= comment.text %>
                             </p>
                         <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
-                            <a 
+                            <a  
                                class="btn btn-xs btn-warning" 
                                href="/treks/<%=trek._id%>/comments/<%=comment._id%>/edit">
                                Edit

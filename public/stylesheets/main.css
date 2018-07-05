@@ -1,3 +1,15 @@
+.dot {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  background-size: cover;
+}
+
+.main-head {
+    color: black;
+}
+
 .ratings-show {
     margin-right: 1.8%;
     margin-top: 0.06vh;
@@ -85,8 +97,21 @@
     margin-bottom: 10vh;
 }
 
+#main {
+    background-image: url('/media/mainCover-c.jpg');
+    background-size: cover;
+}
+
 /* Google Maps */
 #map {
     height: 400px;
     width: 100%;
+}
+
+#main-text {
+	color: white;
+    font-weight:700;
+    text-shadow: 0px 4px 3px rgba(0,0,0,0.4), 
+	0px 8px 13px rgba(0,0,0,0.1),
+	0px 18px 23px rgba(0,0,0,0.1);
 }

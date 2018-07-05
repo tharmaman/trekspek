@@ -4,12 +4,14 @@ var mongoose = require("mongoose");
 // declaring schema
 var trekSchema = new mongoose.Schema({
    name: String,
-   image: String,
    rating: String,
    description: String,
    location: String,
    lat: Number,
    lng: Number,
+   image: {
+      type: String, default: "/media/default_trek.png"   
+   },
    createdAt: {
       type: Date,
       default: Date.now  

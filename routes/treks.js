@@ -2,6 +2,7 @@
 var express = require("express");
 var router = express.Router();
 var Trek = require("../models/trek");
+var User = require("../models/user");
 var middleware = require("../middleware");
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -59,14 +60,10 @@ router.get("/", function(req, res){
 // REST CREATE - add new treks to database 
 router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, res){
 
-    console.log(req.body.trek);
     var default_image = "/media/default.png";
     var image = req.body.image ? req.body.image : default_image;
     var name = req.body.name;
     var rating = req.body.rating;
-    console.log("================");
-    console.log("Rating:");
-    console.log(rating);
     var desc = req.body.description;
     var author = {
         id: req.user._id,
@@ -143,7 +140,16 @@ router.get("/:id", function(req, res){
         } else {
             console.log(foundTrek);
             // render show template with said trek
-            res.render("treks/show", {trek: foundTrek});
+            // need to send information about the author to grab avatar
+            User.findById(foundTrek.author.id).exec(function(err, foundUser){
+                if (err || !foundUser){
+                    req.flash("error", "Author does not exist");
+                    console.log(err);
+                } else {
+                    res.render("treks/show", {trek: foundTrek, user: foundUser});
+                }
+            });
+            
         }
     });
 });
@@ -160,14 +166,6 @@ router.get("/:id/edit", middleware.checkTrekOwnership, function(req, res){
 // REST UPDATE- PUT
 router.put("/:id", middleware.checkTrekOwnership, upload.single('image'), function(req, res){
     geocoder.geocode(req.body.location, function (err, data) {
-        console.log("================");
-        console.log("req.body")
-        console.log(req.body);
-        
-        console.log("================");
-        console.log("req.body.location")
-        console.log(req.body.location);
-          
         if (err || !data.length) {
           req.flash('error', 'Invalid address');
           return res.redirect('back');
@@ -176,17 +174,12 @@ router.put("/:id", middleware.checkTrekOwnership, upload.single('image'), functi
         req.body.trek.lat = data[0].latitude;
         req.body.trek.lng = data[0].longitude;
         req.body.trek.location = data[0].formattedAddress;
-        console.log("================");
-        console.log("geo")
-        console.log(req.body.trek.lat);
-        console.log(req.body.trek.lng);
-        console.log(req.body.trek.location);
         
         // uploading image to cloudinary
         cloudinary.uploader.upload(req.file.path, function(result){
             if (err){
                 console.log(err);
-                req.flash("error", "Could not upload image")
+                req.flash("error", "Could not upload image");
             }
             // adding a secure cloudinary url for the image
             req.body.trek.image = result.secure_url;
