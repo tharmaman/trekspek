@@ -2,19 +2,12 @@
     
     <div class="row">
         <div class="col-md-3">
-            <p class="lead">TrekSpek</p>
-            <div class="list-group">
-                <!--add listener later on-->
-                <li class="list-group-item active">Info</li>
-                <li class="list-group-item">Website</li>
-                <li class="list-group-item">Contact</li>
-            </div>
             <div id="map"></div>
         </div>
         <div class="col-md-9">
-            <div class="thumbnail">
-                <img class="img-responsive" src="<%= trek.image %>">
-                <div class="caption-full">
+            <div class="card mb-3">
+                <img class="card-img-top" src="<%= trek.image %>" alt="<%=trek.name%>">
+                <div class="card-body">
                     <div class="pull-right ratings-show">
                         <% for (var i = 0; i < trek.rating; i++) { %>
                             <span class="star-full">
@@ -27,8 +20,9 @@
                             </span>
                     <%  }   %>
                     </div>
-                    <h4><a><%= trek.name %></a></h4>
-                    <p><%= trek.description %> </p>
+                    <h5 class="card-title"><a><%= trek.name %></a></h5>
+                    <p clas="card-text"><%= trek.description %> </p>
+                    <hr>
                     <p>
                         <em> 
                             <a href="/profiles/<%=trek.author.username%>"> 
@@ -44,36 +38,67 @@
                     <% } %>
                 </div>
             </div>
+            <br>
+
             <div class="well">
-                <div class="text-right">
-                    <a class="btn btn-success" href="/treks/<%= trek.id %>/comments/new">
-                        Add New Comment
-                    </a> 
-                </div>
-                <hr>
-                <% trek.comments.forEach(function(comment){ %>
+                <!-- Form To Enter Your Comment In -->
+                <form action = "/treks/<%= trek._id %>/comments" method="POST">
+                    <% if(currentUser){%>
                     <div class="row">
-                        <div class="col-md-12">
-                            <a href="/profiles/<%=trek.author.username%>">
-                                <strong><span class="dot" style="background-image:url('<%=user.avatar%>')"></span> <%= comment.author.username %></strong>
-                            </a>
-                            <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
-                            <p>
-                                <%= comment.text %>
-                            </p>
-                        <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
-                            <a  
-                               class="btn btn-xs btn-warning" 
-                               href="/treks/<%=trek._id%>/comments/<%=comment._id%>/edit">
-                               Edit
-                            </a>
-                            <form class="delete-form" action="/treks/<%=trek._id %>/comments/<%=comment._id %>?_method=DELETE" method="POST">
-                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
-                            </form>
-                        <% } %>
+                        
+                        <div class="col-lg-9 col-md-9">
+                            <div class="form-group">
+                              <input id="trek-comment-input" class="form-control" type="text" name = "comment[text]" placeholder="Enter Your Comment Here">
+                            </div> 
+                        </div>  
+                            
+                        <div class="col-lg-3 col-md-3">
+                            <div class="text-right">
+                                <div class="form-group">
+                                    <button id="trek-comment-submit" class="btn btn-large btn-primary btn-block">Add Comment</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                <% }) %>
+                    <%}%>
+                </form> 
+                <div class= "row">
+                    <% trek.comments.forEach(function(comment){ %>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="float-left">     
+                                    <p>
+                                        <a class="card-title" href="/profiles/<%=trek.author.username%>">
+                                        <strong><span class="dot" style="background-image:url('<%=user.avatar%>')"></span> <%= comment.author.username %> </strong>
+                                        </a>  
+                                    </p>
+                                    <p>
+                                        <%= comment.text %>
+                                    </p>
+                                </div>
+                                <div class="float-right pt-1">
+                                    <p>
+                                        <em><%= moment(comment.createdAt).fromNow() %></em>
+                                    </p>
+                                    <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){%>
+                                        <div class="float-right">
+                                            <a  
+                                               class="btn btn-sm btn-warning" 
+                                               href="/treks/<%=trek._id%>/comments/<%=comment._id%>/edit">
+                                               Edit
+                                            </a>
+                                            <form class="delete-form" action="/treks/<%=trek._id %>/comments/<%=comment._id %>?_method=DELETE" method="POST">
+                                                <button class="btn btn-sm btn-danger"> Delete </button>
+                                            </form>  
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>   
             </div>
         </div>
     </div>

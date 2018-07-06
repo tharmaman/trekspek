@@ -1,8 +1,11 @@
 <% include ../partials/header %>
 
-    <div class="row">
-        <h1 style="text-align: center;">Edit <%=trek.name%></h1>
-        <div style="width: 40%; margin: 25px auto;">
+    <div class="row justify-content-center">
+        <div class="col-md-12 text-center">
+            <h1>Edit <%=trek.name%></h1>
+            <hr>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <form action="/treks/<%= trek._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <input class="form-control" type="text" name="trek[name]" value="<%= trek.name %>">

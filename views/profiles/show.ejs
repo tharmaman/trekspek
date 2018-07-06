@@ -2,20 +2,21 @@
 
 <div class="row">
     <div class="col-md-4">
-        <div class="thumbnail">
-            <h3 align="middle"><%=profile.username%></h3>
-            <img id="profile-pic"class="img-thumbnail" src="<%= profile.avatar %>" alt="user profile image">
-            <div align="middle" class="caption"> <%=profile.firstName%> <%=profile.lastName%> </div>
-            <div align="middle" class="caption"><a  href="mailto:<%=profile.email%>"><%=profile.email%></a></div>
-            <p align="middle" class="caption"><em><%=profile.bio%></em></p>
-            <% if(currentUser && profile.username === currentUser.username || currentUser && currentUser.isAdmin) { %>
-                <div align="middle"> 
-                    <a class="btn btn-warning" href="/profiles/<%= profile.username %>/edit">Edit My Profile</a>
+        <div class="card-mb-4">
+            <h3 class="card-title" ><%=profile.username%></h3>
+            <img id="profile-pic"class="card-img-top" src="<%= profile.avatar %>" alt="user profile image">
+                <div class="card-body">
+                    <div class="card-text"> <%=profile.firstName%> <%=profile.lastName%> </div>
+                    <div class="card-text"><a  href="mailto:<%=profile.email%>"><%=profile.email%></a></div>
+                    <p class="card-text"><em><%=profile.bio%></em></p>
+                <% if(currentUser && profile.username === currentUser.username || currentUser && currentUser.isAdmin) { %>
+                    <div align="middle"> 
+                        <a class="btn btn-warning" href="/profiles/<%= profile.username %>/edit">Edit My Profile</a>
+                    </div>
+                <% } %>
                 </div>
-            <% } %>
         </div>
-    </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <h3>Recent Treks</h3>
         <ul>
          <% treks.forEach(function(trek) { %>
