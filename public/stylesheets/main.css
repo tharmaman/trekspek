@@ -121,3 +121,9 @@
 #add {
     width: 30vh;
 }
+
+#profile-pic {
+    height: 40vh;
+    width: 40vh;
+    object-fit: cover;
+}
