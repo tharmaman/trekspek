@@ -38,7 +38,7 @@
     </div>
 </div>
 
-<!-- Need to load before the listener or else it won't work-->
+<!-- Need to load before the listener or else it won't show-->
 <script
     src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -46,10 +46,10 @@
 </script>
 
 <script>
-    // preventing white spaces to be entered in the username otherwise routing would mess up
+    // preventing white spaces and / to be entered in the username otherwise routing would mess up
     $("input#username").on({
           keydown: function(e) {
-            if (e.which === 32)
+            if (e.which === 32 || e.which === 191)
               return false;
           },
           change: function() {

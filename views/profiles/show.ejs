@@ -4,9 +4,15 @@
     <div class="col-md-4">
         <div class="thumbnail">
             <h3 align="middle"><%=profile.username%></h3>
-            <img class="img-thumbnail" src="<%= profile.avatar %>" alt="user profile image">
+            <img id="profile-pic"class="img-thumbnail" src="<%= profile.avatar %>" alt="user profile image">
             <div align="middle" class="caption"> <%=profile.firstName%> <%=profile.lastName%> </div>
             <div align="middle" class="caption"><a  href="mailto:<%=profile.email%>"><%=profile.email%></a></div>
+            <p align="middle" class="caption"><em><%=profile.bio%></em></p>
+            <% if(currentUser && profile.username === currentUser.username || currentUser && currentUser.isAdmin) { %>
+                <div align="middle"> 
+                    <a class="btn btn-warning" href="/profiles/<%= profile.username %>/edit">Edit My Profile</a>
+                </div>
+            <% } %>
         </div>
     </div>
     <div class="col-md-8">
@@ -22,6 +28,5 @@
         </ul>
     </div>
 </div>
-
 
 <% include ../partials/footer %>

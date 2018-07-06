@@ -10,6 +10,7 @@ var UserSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     email: String,
+    bio: String,
     isAdmin: {
         type: Boolean, default: false
     }

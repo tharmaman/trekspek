@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var User = require("../models/user");
 var passport = require("passport");
+var middleware = require("../middleware");
 var Trek = require("../models/trek");
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -51,7 +52,8 @@ router.post("/register", upload.single('avatar'), function(req, res){
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
-            avatar: req.body.avatar
+            avatar: req.body.avatar,
+            bio: req.body.bio
         });
         // if image is uploaded (req.file.path)
         if (req.file){
@@ -114,6 +116,8 @@ router.get("/logout", function(req, res){
 // ====================
 //  PROFILE ROUTE
 // ====================
+
+// SHOW
 router.get("/profiles/:username", function(req, res) {
     User.find({username: req.params.username}, function(err, foundProfile){
         if(err) {
@@ -133,5 +137,45 @@ router.get("/profiles/:username", function(req, res) {
     });
 });
 
+// REST EDIT - GET
+router.get("/profiles/:username/edit", middleware.checkProfileOwnership, function(req, res){
+	User.findOne({username: req.params.username}, function(err, foundUser){
+		res.render("profiles/edit", {user: foundUser});
+	});
+});
+
+// REST UPDATE- PUT
+router.put("/profiles/:username", middleware.checkProfileOwnership, upload.single('image'), function(req, res){
+    // checking if image file was uploaded
+    if (req.file) {
+        // uploading image to cloudinary
+        cloudinary.uploader.upload(req.file.path, function(result){
+            // adding a secure cloudinary url for the image
+            req.body.user.image = result.secure_url;
+            
+            // updating database
+            User.findOneAndUpdate({username: req.params.username}, req.body.user, function(err, user){
+                if(err){
+                    req.flash("error", err.message);
+                    res.redirect("back");
+                } else {
+                    req.flash("success","Successfully Updated Your Profile!");
+                    res.redirect("/profiles/" + user.username);
+                }
+            });
+        });   
+    } else {
+        // updating database
+        User.findOneAndUpdate({username: req.params.username}, req.body.user, function(err, user){
+            if(err){
+                req.flash("error", err.message);
+                res.redirect("back");
+            } else {
+                req.flash("success","Successfully Updated Your Profile!");
+                res.redirect("/profiles/" + user.username);
+            }
+        });
+    }
+});
 
 module.exports = router;

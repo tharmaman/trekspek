@@ -44,7 +44,7 @@ body {
 }
 
 .slideshow li:nth-child(1) { 
-  background-image: url(../media/landing/1.jpg) 
+  background-image: url(https://res.cloudinary.com/tharmaman/image/upload/v1530600531/tdzjir4twrh2mgffu0xg.jpg) 
 }
 .slideshow li:nth-child(2) { 
   background-image: url(../media/landing/2.jpg);

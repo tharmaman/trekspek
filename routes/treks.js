@@ -76,8 +76,7 @@ router.get("/", function(req, res){
 // REST CREATE - add new treks to database 
 router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, res){
 
-    var default_image = "/media/default.png";
-    var image = req.body.image ? req.body.image : default_image;
+    var image = "https://res.cloudinary.com/tharmaman/image/upload/v1530828961/default_trek.jpg";
     var name = req.body.name;
     var rating = req.body.rating;
     var desc = req.body.description;
@@ -99,16 +98,44 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
         // creates a better version of the address entered
         var location = data[0].formattedAddress;
         
-        // uploading image to cloudinary
-        cloudinary.uploader.upload(req.file.path, function(result){
-            if (err){
-                console.log(err);
-                req.flash("error", "Could not upload image")
-            }
-            // adding a secure cloudinary url for the image
-            image = result.secure_url;
-            
-             // create a object to add to the db
+        // checking if image is uploaded
+        if (req.file){
+            // uploading image to cloudinary
+            cloudinary.uploader.upload(req.file.path, function(result){
+                if (err){
+                    console.log(err);
+                    req.flash("error", "Could not upload image")
+                }
+                // adding a secure cloudinary url for the image
+                image = result.secure_url;
+                
+                 // create a object to add to the db
+                var newTrek = {
+                    name: name, 
+                    image: image, 
+                    description: desc, 
+                    author: author,
+                    rating: rating,
+                    location: location,
+                    lat: lat,
+                    lng: lng
+                };
+                
+                // creating new trek document to store in DB
+                Trek.create(newTrek, function(err, trek) {
+                    if (err) {
+                        req.flash('error', err.message);
+                        return res.redirect('back');
+                    } else {
+                        console.log(trek);
+                        req.flash("success", "Successfully Added Trek!");
+                        res.redirect('/treks/');
+                    }
+                });
+            });
+        } else {
+            // for else just use what was from the db
+            // create a object to add to the db
             var newTrek = {
                 name: name, 
                 image: image, 
@@ -122,17 +149,16 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
             
             // creating new trek document to store in DB
             Trek.create(newTrek, function(err, trek) {
-            if (err) {
-                req.flash('error', err.message);
-                return res.redirect('back');
-            } else {
-                console.log(trek);
-                req.flash("success", "Successfully Added Trek!");
-                res.redirect('/treks/');
-            }
-          });
-        });
-        
+                if (err) {
+                    req.flash('error', err.message);
+                    return res.redirect('back');
+                } else {
+                    console.log(trek);
+                    req.flash("success", "Successfully Added Trek!");
+                    res.redirect('/treks/');
+                }
+            });
+        }   
     });
 });
 
@@ -191,15 +217,29 @@ router.put("/:id", middleware.checkTrekOwnership, upload.single('image'), functi
         req.body.trek.lng = data[0].longitude;
         req.body.trek.location = data[0].formattedAddress;
         
-        // uploading image to cloudinary
-        cloudinary.uploader.upload(req.file.path, function(result){
-            if (err){
-                console.log(err);
-                req.flash("error", "Could not upload image");
-            }
-            // adding a secure cloudinary url for the image
-            req.body.trek.image = result.secure_url;
-            
+        // checking if image file was uploaded
+        if (req.file) {
+            // uploading image to cloudinary
+            cloudinary.uploader.upload(req.file.path, function(result){
+                if (err){
+                    console.log(err);
+                    req.flash("error", "Could not upload image");
+                }
+                // adding a secure cloudinary url for the image
+                req.body.trek.image = result.secure_url;
+                
+                // updating database
+                Trek.findByIdAndUpdate(req.params.id, req.body.trek, function(err, trek){
+                    if(err){
+                        req.flash("error", err.message);
+                        res.redirect("back");
+                    } else {
+                        req.flash("success","Successfully Updated Trek!");
+                        res.redirect("/treks/" + trek._id);
+                    }
+                });
+            });   
+        } else {
             // updating database
             Trek.findByIdAndUpdate(req.params.id, req.body.trek, function(err, trek){
                 if(err){
@@ -210,8 +250,8 @@ router.put("/:id", middleware.checkTrekOwnership, upload.single('image'), functi
                     res.redirect("/treks/" + trek._id);
                 }
             });
-        });   
-  });
+        }
+    });
 });
 
 // REST DESTROY - DELETE
