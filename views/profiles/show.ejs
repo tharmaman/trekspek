@@ -1,33 +1,35 @@
 <% include ../partials/header %>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card-mb-4">
-            <h3 class="card-title" ><%=profile.username%></h3>
-            <img id="profile-pic"class="card-img-top" src="<%= profile.avatar %>" alt="user profile image">
-                <div class="card-body">
-                    <div class="card-text"> <%=profile.firstName%> <%=profile.lastName%> </div>
-                    <div class="card-text"><a  href="mailto:<%=profile.email%>"><%=profile.email%></a></div>
-                    <p class="card-text"><em><%=profile.bio%></em></p>
-                <% if(currentUser && profile.username === currentUser.username || currentUser && currentUser.isAdmin) { %>
-                    <div align="middle"> 
-                        <a class="btn btn-warning" href="/profiles/<%= profile.username %>/edit">Edit My Profile</a>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card-mb-4">
+                <h3 class="card-title" ><%=profile.username%></h3>
+                <img id="profile-pic"class="card-img-top" src="<%= profile.avatar %>" alt="user profile image">
+                    <div class="card-body">
+                        <div class="card-text"> <%=profile.firstName%> <%=profile.lastName%> </div>
+                        <div class="card-text"><a  href="mailto:<%=profile.email%>"><%=profile.email%></a></div>
+                        <p class="card-text"><em><%=profile.bio%></em></p>
+                    <% if(currentUser && profile.username === currentUser.username || currentUser && currentUser.isAdmin) { %>
+                        <div class="middle"> 
+                            <a class="btn btn-warning" href="/profiles/<%= profile.username %>/edit">Edit My Profile</a>
+                        </div>
+                    <% } %>
                     </div>
-                <% } %>
-                </div>
+            </div>
         </div>
-    <div class="col-md-12">
-        <h3>Recent Treks</h3>
-        <ul>
-         <% treks.forEach(function(trek) { %>
-            <li>
-                <a href="/treks/<%= trek.id %>">
-                    <%= trek.name %>
-                </a>
-            </li>
-        <%  }); %>
-        </ul>
-    </div>
-</div>
+
+        <div class="col-md-12">
+            <h3>Recent Treks</h3>
+            <ul>
+             <% treks.forEach(function(trek) { %>
+                <li>
+                    <a href="/treks/<%= trek.id %>">
+                        <%= trek.name %>
+                    </a>
+                </li>
+            <%  }); %>
+            </ul>
+        </div>
+    </div> 
 
 <% include ../partials/footer %>

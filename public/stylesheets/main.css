@@ -1,3 +1,12 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
 /*Form styling */
 .form-signin {
   width: 100%;
@@ -29,16 +38,6 @@
   border-top-right-radius: 0;
 }
 
-/* Sticky Footer */
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: 60px;
-}
-
 .footer {
     position: absolute;
     bottom: 0;
@@ -66,7 +65,7 @@ body {
 
 .ratings-show {
     margin-right: 1.8%;
-    margin-top: 0.06vh;
+    margin-top: -0.55vh;
     margin-bottom: 0.2vh;
     font-size: 18px;
     font-size: 3vh;
@@ -145,6 +144,11 @@ body {
     display: inline;
 }
 
+#slogan-text {
+    color: white; 
+    font-weight:500;
+    text-shadow:    0px 4px 3px rgba(0,0,0,0.4), 
+}
 
 #ratediv {
     position: relative;

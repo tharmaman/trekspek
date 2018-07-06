@@ -3,9 +3,13 @@
     <header id="main" class="jumbotron main-head">
         <div class = "container">
             <h1 id="main-text">Welcome To TrekSpek</h1>
-            <p> View the top Treks from all over the world </p>
+            <h5 id="slogan-text">
+                Adventure Awaits
+            <h5>
+            <br>
+            <br>
             <p>
-                <a id="add" href="/treks/new" class="btn btn-primary btn-lg">Add A New Trek</a>
+                <a id="add" href="/treks/new" class="btn btn-success btn-lg">Add A New Trek</a>
             </p>
         </div>
     </header>
@@ -16,7 +20,7 @@
                 <form action="/treks" method="GET" class="form-inline">
                     <div>
                         <input id="search" type="text" name="search" placeholder="Find treks by name, location, author..." class="form-control">
-                        <input type="submit" value="Search" class="btn btn-outline-primary">
+                        <input type="submit" value="Search" class="btn btn-outline-success">
                     </div>
                 </form>
             </p>
@@ -36,7 +40,7 @@
                     <img class="card-img-top" src="<%= trek.image %>" alt="<%= trek.name %>">
                     <div class="card-body">
                         <h5 class="card-title"><%= trek.name %></h5>
-                        <a href="/treks/<%= trek._id %>" class="btn btn-primary">More Info</a>
+                        <a href="/treks/<%= trek._id %>" class="btn btn-success">More Info</a>
                     </div>
                 </div>
             </div>

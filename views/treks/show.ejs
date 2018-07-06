@@ -8,7 +8,7 @@
             <div class="card mb-3">
                 <img class="card-img-top" src="<%= trek.image %>" alt="<%=trek.name%>">
                 <div class="card-body">
-                    <div class="pull-right ratings-show">
+                    <div class="float-right ratings-show">
                         <% for (var i = 0; i < trek.rating; i++) { %>
                             <span class="star-full">
                               <i class="fas fa-star"></i>
@@ -24,11 +24,12 @@
                     <p clas="card-text"><%= trek.description %> </p>
                     <hr>
                     <p>
-                        <em> 
+                        <strong> 
                             <a href="/profiles/<%=trek.author.username%>"> 
                                 <span class="dot" style="background-image:url('<%=user.avatar%>')"></span> <%= trek.author.username %> 
-                            </a>, <%= moment(trek.createdAt).fromNow() %> 
-                        </em> 
+                            </a>
+                        </strong> 
+                        <em>, <%= moment(trek.createdAt).fromNow() %> </em>
                     </p>
                     <% if(currentUser && trek.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
                         <a class="btn btn-warning" href="/treks/<%= trek._id %>/edit">Edit</a>
@@ -55,7 +56,7 @@
                         <div class="col-lg-3 col-md-3">
                             <div class="text-right">
                                 <div class="form-group">
-                                    <button id="trek-comment-submit" class="btn btn-large btn-primary btn-block">Add Comment</button>
+                                    <button id="trek-comment-submit" class="btn btn-large btn-success btn-block">Add Comment</button>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +71,7 @@
                                 <div class="float-left">     
                                     <p>
                                         <a class="card-title" href="/profiles/<%=trek.author.username%>">
-                                        <strong><span class="dot" style="background-image:url('<%=user.avatar%>')"></span> <%= comment.author.username %> </strong>
+                                        <span class="dot" style="background-image:url('<%=user.avatar%>')"></span> <%= comment.author.username %>
                                         </a>  
                                     </p>
                                     <p>

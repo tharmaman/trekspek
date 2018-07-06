@@ -10,10 +10,12 @@
                 <div class="form-group">
                     <input class="form-control" type="text" name="trek[name]" value="<%= trek.name %>">
                 </div>
-                <div class="form-group">
-                    <label for="image">Image <em>*optional but preferred :) </em></label>
-                    <input type="file" id="image" name="image" accept="image/*">
+                <div class="form-group custom-file">
+                  <input type="file" class="custom-file-input" id="image" name="image" accept="image/*">
+                  <label class="custom-file-label" for="image">Show us a picture!</label>
                 </div>
+                <br>
+                <br>
                 <div class="form-group">
                     <label for="location">Location</label>
                     <input class="form-control" type="text" name="location" id="location" value="<%= trek.location %>">
@@ -38,7 +40,7 @@
                     <textarea rows="4" class="form-control" type="text" name="trek[description]" required><%= trek.description %></textarea>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+                    <button class="btn btn-lg btn-success btn-block">Submit!</button>
                 </div>
             </form>
             <a href="/treks">Go back</a>
@@ -50,5 +52,21 @@
             <%    document.getElementById('star'+i).checked=true; %>
          <%   } %>
     <%    }; %>
+    
+        <!-- Need to load before the script or else it won't show-->
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+    </script>
+    
+    <script>
+        $('#image').on('change',function(){
+            //get the file name
+            var fileName = $(this).val().split('\\').pop();
+            //replace the "Choose a file" label
+            $(this).next('.custom-file-label').html(fileName);
+        })
+    </script>
 
 <% include ../partials/footer %>
