@@ -19,9 +19,6 @@ var commentRoutes       = require("./routes/comments"),
     trekRoutes          = require("./routes/treks"),
     indexRoutes         = require("./routes/index");
 
-// check for environment variable
-// console.log(process.env.DATABASEURL);
-
 // adding backup to environment variable not loading up
 var url = process.env.DATABASEURL || "mongodb://localhost/trek_spek";
 
