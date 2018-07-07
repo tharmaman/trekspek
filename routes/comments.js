@@ -41,7 +41,7 @@ router.post("/", function(req, res){
                    trek.comments.push(comment);
                    trek.save();
                    console.log(comment);
-                   req.flash("info", "Successfully added comment");
+                   req.flash("success", "Successfully added comment");
                    res.redirect("/treks/" + trek._id);
                }
            })
@@ -87,7 +87,7 @@ router.delete("/:comment_id", middleware.checkCommentOwnership, function(req, re
         if(err){
             res.redirect("back");
         } else {
-            req.flash("info", "Comment deleted");
+            req.flash("success", "Comment deleted");
             res.redirect("/treks/" + req.params.id);
         }
     });

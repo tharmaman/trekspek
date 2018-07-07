@@ -67,7 +67,7 @@ router.post("/register", upload.single('avatar'), function(req, res){
                         return res.render("register", {error: err.message});  // return gets out of entire callback
                     } else {
                         passport.authenticate("local")(req, res, function(){
-                            req.flash("info", "Catch you on the backcountry " + user.username +"!");
+                            req.flash("success", "Catch you on the backcountry " + user.username +"!");
                             res.redirect("/treks");
                         });
                     }
@@ -82,7 +82,7 @@ router.post("/register", upload.single('avatar'), function(req, res){
                     return res.render("register", {error: err.message});  // return gets out of entire callback
                 } else {
                     passport.authenticate("local")(req, res, function(){
-                        req.flash("info", "Adventure awaits you " + user.username +"!");
+                        req.flash("success", "Adventure awaits you " + user.username +"!");
                         res.redirect("/treks");
                     });
                 }
@@ -109,7 +109,7 @@ router.post("/login", passport.authenticate("local",
 // logout route
 router.get("/logout", function(req, res){
     req.logout();
-    req.flash("info", "Logged you out!");
+    req.flash("success", "Logged you out!");
     res.redirect("/treks");
 });
 
@@ -159,7 +159,7 @@ router.put("/profiles/:username", middleware.checkProfileOwnership, upload.singl
                     req.flash("error", err.message);
                     res.redirect("back");
                 } else {
-                    req.flash("info","Successfully Updated Your Profile!");
+                    req.flash("success","Successfully Updated Your Profile!");
                     res.redirect("/profiles/" + user.username);
                 }
             });
@@ -171,7 +171,7 @@ router.put("/profiles/:username", middleware.checkProfileOwnership, upload.singl
                 req.flash("error", err.message);
                 res.redirect("back");
             } else {
-                req.flash("info","Successfully Updated Your Profile!");
+                req.flash("success","Successfully Updated Your Profile!");
                 res.redirect("/profiles/" + user.username);
             }
         });

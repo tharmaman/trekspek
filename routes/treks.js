@@ -128,7 +128,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
                         return res.redirect('back');
                     } else {
                         console.log(trek);
-                        req.flash("info", "Successfully Added Trek!");
+                        req.flash("success", "Successfully Added Trek!");
                         res.redirect('/treks/');
                     }
                 });
@@ -154,7 +154,7 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
                     return res.redirect('back');
                 } else {
                     console.log(trek);
-                    req.flash("info", "Successfully Added Trek!");
+                    req.flash("success", "Successfully Added Trek!");
                     res.redirect('/treks/');
                 }
             });
@@ -234,7 +234,7 @@ router.put("/:id", middleware.checkTrekOwnership, upload.single('image'), functi
                         req.flash("error", err.message);
                         res.redirect("back");
                     } else {
-                        req.flash("info","Successfully Updated Trek!");
+                        req.flash("success","Successfully Updated Trek!");
                         res.redirect("/treks/" + trek._id);
                     }
                 });
@@ -246,7 +246,7 @@ router.put("/:id", middleware.checkTrekOwnership, upload.single('image'), functi
                     req.flash("error", err.message);
                     res.redirect("back");
                 } else {
-                    req.flash("info","Successfully Updated Trek!");
+                    req.flash("success","Successfully Updated Trek!");
                     res.redirect("/treks/" + trek._id);
                 }
             });
@@ -260,7 +260,7 @@ router.delete("/:id", middleware.checkTrekOwnership, function(req, res){
         if(err){
             res.redirect("/treks");
         } else {
-            req.flash("info", "Successfully Deleted Trek!");
+            req.flash("success", "Successfully Deleted Trek!");
             res.redirect("/treks");
         }
     });
