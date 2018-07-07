@@ -191,7 +191,6 @@ router.get("/:id", function(req, res){
                     res.render("treks/show", {trek: foundTrek, user: foundUser});
                 }
             });
-            
         }
     });
 });
