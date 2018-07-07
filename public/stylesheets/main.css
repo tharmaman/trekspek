@@ -181,7 +181,7 @@ body {
 }
 
 #profile-pic {
-    height: 40vh;
-    width: 40vh;
+    height: 250px;
+    width: 250px;
     object-fit: cover;
 }

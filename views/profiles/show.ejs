@@ -1,35 +1,117 @@
 <% include ../partials/header %>
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card-mb-4">
-                <h3 class="card-title" ><%=profile.username%></h3>
-                <img id="profile-pic"class="card-img-top" src="<%= profile.avatar %>" alt="user profile image">
-                    <div class="card-body">
-                        <div class="card-text"> <%=profile.firstName%> <%=profile.lastName%> </div>
-                        <div class="card-text"><a  href="mailto:<%=profile.email%>"><%=profile.email%></a></div>
-                        <p class="card-text"><em><%=profile.bio%></em></p>
-                    <% if(currentUser && profile.username === currentUser.username || currentUser && currentUser.isAdmin) { %>
-                        <div class="middle"> 
-                            <a class="btn btn-warning" href="/profiles/<%= profile.username %>/edit">Edit My Profile</a>
+    <div class="row my-2">
+        <div class="col-lg-8 order-lg-2">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" data-target="#activity" data-toggle="tab" class="nav-link">Recent Activity</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" data-target="#edit" data-toggle="tab" class="nav-link">Edit</a>
+                </li>
+            </ul>
+            <div class="tab-content py-4">
+                <div class="tab-pane active" id="profile">
+                    <h5 class="mb-3">User Profile</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Bio</h6>
+                            <p>
+                                <%=profile.bio%>
+                            </p>
+                            <h6>Name</h6>
+                            <p>
+                                <%=profile.firstName%> <%=profile.lastName%>
+                            </p>
+                            <h6>Email</h6>
+                            <p>
+                                <a href="mailto:<%=profile.email%>"><%=profile.email%></a>
+                            </p>
                         </div>
-                    <% } %>
                     </div>
+                    <!--/row-->
+                </div>
+                <div class="tab-pane" id="activity">
+                    <div class="alert alert-info alert-dismissable">
+                        <a class="panel-close close" data-dismiss="alert">×</a> Here is <%=profile.username%>'s most recent activity.
+                    </div>
+                    <table class="table table-hover table-striped">
+                        <tbody> 
+                        <% treks.forEach(function(trek) { %>                
+                            <tr>
+                                <td>
+                                   <span class="float-right font-weight-bold"><%=moment(trek.createdAt).fromNow()%></span> <a href="/treks/<%= trek.id %>"><%= trek.name %></a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                        </tbody>             
+                    </table>
+                </div>
+                <div class="tab-pane" id="edit">
+                    <form role="form" form action="/profiles/<%=profile.username%>?_method=PUT" method="POST" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">First Name</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" type="text" value="<%=profile.firstName%>" name="user[firstName]">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Last Name</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" type="text" value="<%=profile.lastName%>" name="user[lastName]">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Email</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" type="email" value="<%=profile.email%>" name="user[email]">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Bio</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" type="text" value="<%=profile.bio%>" name="user[bio]">
+                            </div>
+                        </div>
+                        <div class="form-group row custom-file">
+                            <input type="file" class="custom-file-input" id="avatar" name="avatar" accept="image/*">
+                            <label class="custom-file-label" for="avatar">Update your avatar</label>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label"></label>
+                            <div class="col-lg-9">
+                                <input type="reset" class="btn btn-secondary" value="Cancel">
+                                <input type="submit" class="btn btn-primary" value="Save Changes">
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-
-        <div class="col-md-12">
-            <h3>Recent Treks</h3>
-            <ul>
-             <% treks.forEach(function(trek) { %>
-                <li>
-                    <a href="/treks/<%= trek.id %>">
-                        <%= trek.name %>
-                    </a>
-                </li>
-            <%  }); %>
-            </ul>
+        <div class="col-lg-4 order-lg-1 text-center">
+            <img src="<%=profile.avatar%>" id="profile-pic" class="mx-auto img-fluid rounded-circle d-block" alt="avatar">
         </div>
-    </div> 
+    </div>
+</div>
+
+<!-- Need to load before the script or else it won't show-->
+<script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous">
+</script>
+
+<script>
+    $('#avatar').on('change',function(){
+        //get the file name
+        var fileName = $(this).val().split('\\').pop();
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
+    })
+</script>
 
 <% include ../partials/footer %>
