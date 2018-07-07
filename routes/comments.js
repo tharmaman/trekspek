@@ -37,6 +37,7 @@ router.post("/", function(req, res){
                    comment.author.id = req.user._id;
                    comment.author.username = req.user.username;
                    comment.author.avatar = req.user.avatar;
+                   comment.author.isAdmin = req.user.isAdmin;
                    //   save comment
                    comment.save();
                    trek.comments.push(comment);

@@ -12,7 +12,8 @@ var commentSchema = mongoose.Schema({
             ref: "User"
         },
         username: String,
-        avatar: String
+        avatar: String,
+        isAdmin: Boolean
     }
 });
 

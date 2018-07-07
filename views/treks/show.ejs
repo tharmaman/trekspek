@@ -71,7 +71,12 @@
                                 <div class="float-left">     
                                     <p>
                                         <a class="card-title" href="/profiles/<%=comment.author.username%>">
-                                        <span class="dot" style="background-image:url('<%=comment.author.avatar%>')"></span> <%= comment.author.username %>
+                                        <span class="dot" style="background-image:url('<%=comment.author.avatar%>')"></span> <%= comment.author.username %>        
+                                            <%if (comment.author.isAdmin === true){%>
+                                                    <span style="font-size: 1em; color: lightgreen;">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+                                            <% } %>
                                         </a>  
                                     </p>
                                     <p>
