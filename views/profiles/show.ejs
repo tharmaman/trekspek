@@ -94,6 +94,14 @@
         </div>
         <div class="col-lg-4 order-lg-1 text-center">
             <img src="<%=profile.avatar%>" id="profile-pic" class="mx-auto img-fluid rounded-circle d-block" alt="avatar">
+            <h4 class="pt-3 text-center">
+                <%=profile.username%> 
+                <%if (profile.isAdmin === true){%>
+                        <span style="font-size: 1em; color: lightgreen;">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <% } %>
+            </h4> 
         </div>
     </div>
 </div>
