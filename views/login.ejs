@@ -7,7 +7,7 @@
             <!--<img class="mb-4" src="https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">-->
             <h1 class="h3 mb-3 font-weight-normal text-center">Please sign in</h1>
             <label for="inputUsername" class="sr-only">Username</label>
-            <input type="text" id="inputUsername" class="form-control" name="username" placeholder="Username" required autofocus>
+            <input type="text" id="inputUsername" class="form-control" name="username" placeholder="Username" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="HELPER: Password must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters" required autofocus>
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
             <button class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
