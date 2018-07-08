@@ -144,6 +144,10 @@ body {
     display: inline;
 }
 
+#logout {
+    padding-top: 1.05rem !important;
+}
+
 #slogan-text {
     color: white; 
     font-weight:500;

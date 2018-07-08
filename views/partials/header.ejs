@@ -32,10 +32,12 @@
                 </li>
             <% } else { %>
                 <li class="nav-item">
-                    <a href="/profiles/<%=currentUser.username%>" class="nav-link">Signed In As <%= currentUser.username %></a>
+                    <a class="nav-link" href="/profiles/<%=currentUser.username%>">
+                        <span class="dot" style="background-image:url('<%=currentUser.avatar%>')"></span> <%= currentUser.username %>        
+                    </a>  
                 </li>
                 <li class="nav-item">
-                    <a href="/logout" class="nav-link">Logout</a>
+                    <a href="/logout" id="logout" class="nav-link">Logout</a>
                 </li>
             <% } %>
             </ul>
