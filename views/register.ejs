@@ -15,19 +15,15 @@
             </div>
             <br>
             <br>
-
             <div class="form-group">
                 <label for="password">Password</label>
                 <input class="form-control" type="password" name="password" id="password" placeholder="" required>
             </div>
-
             <div class="form-group" id="retype_password_group">
                 <label class="form-control-label" for="retype_password">Retype Password</label>
                 <input type="password" class="form-control" name="retype_password" id="retype_password" required="">
                 <div id="retype_alert"></div>
             </div>
-
-
             <div class="form-group">
                 <label for="firstName">First Name</label>
                 <input class="form-control" type="text" name="firstName" placeholder="Severus" required>
@@ -82,15 +78,14 @@
         })
         
     // adding listener to check if passwords match
-
     $(function() {
         var error_retype_password = false;
 
-        $("#retype_password").focusout(function() {
+        $("#retype_password").keyup(function() {
             check_retype_password();
         });
         
-        $("#password").focusout(function() {
+        $("#password").keyup(function() {
             check_retype_password();
         });
 
@@ -99,18 +94,27 @@
             var password = $("#password").val();
             var retype_password = $("#retype_password").val();
             
-            if(password !=  retype_password) {
-                $("#retype_password_group").attr("class", "form-group has-danger")
-                $("#retype_password").attr("class", "form-control is-invalid")
-                $("#retype_alert").attr("class", "invalid-feedback")
-                $("#retype_alert").text("Passwords do not match!")
-                error_retype_password = true;
-            } else {
-                $("#retype_password_group").attr("class", "form-group has-success")
-                $("#retype_password").attr("class", "form-control is-valid")
-                $("#retype_alert").attr("class", "valid-feedback")
-                $("#retype_alert").text("Success! Passwords match!")
-            }        
+            if(password === "" || retype_password === ""){
+                    $("#retype_password_group").attr("class", "form-group")
+                    $("#retype_password").attr("class", "form-control")
+                    $("#retype_alert").text("")
+                    $("#retype_alert").attr("class", "")
+            }
+            
+            if(password != "" && retype_password != ""){
+                if(password != retype_password) {
+                    $("#retype_password_group").attr("class", "form-group has-danger")
+                    $("#retype_password").attr("class", "form-control is-invalid")
+                    $("#retype_alert").attr("class", "invalid-feedback")
+                    $("#retype_alert").text("Passwords do not match!")
+                    error_retype_password = true;
+                } else {
+                    $("#retype_password_group").attr("class", "form-group has-success")
+                    $("#retype_password").attr("class", "form-control is-valid")
+                    $("#retype_alert").attr("class", "valid-feedback")
+                    $("#retype_alert").text("Success! Passwords match!")
+                }    
+            }
         }
 
         $("#registration_form").submit(function() {

@@ -1,3 +1,4 @@
+
 <% include ../partials/header %>
     <div class="row my-2">
         <div class="col-lg-8 order-lg-2">
@@ -10,7 +11,10 @@
                 </li>
             <% if(currentUser && profile.username === currentUser.username || currentUser && currentUser.isAdmin) { %>
                 <li class="nav-item">
-                    <a href="" data-target="#edit" data-toggle="tab" class="nav-link">Edit</a>
+                    <a href="" data-target="#edit" data-toggle="tab" class="nav-link">Edit Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" data-target="#change" data-toggle="tab" class="nav-link">Change Password</a>
                 </li>
             <% } %>
             </ul>
@@ -92,6 +96,43 @@
                         </div>
                     </form>
                 </div>
+                <div class="tab-pane" id="change">
+                    <form role="form" form action="/profiles/<%=profile.username%>/password?_method=PUT" method="POST">
+                        <div id="hide" class="form-group row">
+                            <label class="col-lg-4 col-form-label form-control-label">Username</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" id="inputUsername" type="text" value="<%=profile.username%>" name="username">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label form-control-label">Old Password</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" id="inputPassword" type="password" name="password" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label form-control-label">New Password</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" id="password" type="password" name="user[newPassword]" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label form-control-label">Retype New Password</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" id="retype_password" type="password" name="user[retypePassword]" required>
+                                <div id="retype_alert"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label"></label>
+                            <div class="col-lg-9">
+                                <input type="reset" class="btn btn-secondary" value="Cancel">
+                                <input type="submit" class="btn btn-primary" value="Save Changes">
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <div class="col-lg-4 order-lg-1 text-center">
@@ -116,12 +157,68 @@
 </script>
 
 <script>
+    $("#hide").hide();
+
+
     $('#avatar').on('change',function(){
         //get the file name
         var fileName = $(this).val().split('\\').pop();
         //replace the "Choose a file" label
         $(this).next('.custom-file-label').html(fileName);
     })
+
+    // adding listener to check if passwords match
+    $(function() {
+        var error_retype_password = false;
+
+        $("#retype_password").keyup(function() {
+            check_retype_password();
+        });
+        
+        $("#password").keyup(function() {
+            check_retype_password();
+        });
+
+        function check_retype_password() {
+        
+            var password = $("#password").val();
+            var retype_password = $("#retype_password").val();
+            
+            if(password === "" || retype_password === ""){
+                    $("#retype_password_group").attr("class", "form-group")
+                    $("#retype_password").attr("class", "form-control")
+                    $("#retype_alert").text("")
+                    $("#retype_alert").attr("class", "")
+            }
+            
+            if(password != "" && retype_password != ""){
+                if(password != retype_password) {
+                    $("#retype_password_group").attr("class", "form-group has-danger")
+                    $("#retype_password").attr("class", "form-control is-invalid")
+                    $("#retype_alert").attr("class", "invalid-feedback")
+                    $("#retype_alert").text("Passwords do not match!")
+                    error_retype_password = true;
+                } else {
+                    $("#retype_password_group").attr("class", "form-group has-success")
+                    $("#retype_password").attr("class", "form-control is-valid")
+                    $("#retype_alert").attr("class", "valid-feedback")
+                    $("#retype_alert").text("Success! Passwords match!")
+                }    
+            }
+        }
+
+        $("#registration_form").submit(function() {
+                                                
+            error_retype_password = false;                                                
+            check_retype_password();
+            
+            if(error_retype_password == false){
+                return true;
+            } else {
+                return false;   
+            }
+        });
+    });
 </script>
 
 <% include ../partials/footer %>

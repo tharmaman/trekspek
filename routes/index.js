@@ -137,13 +137,6 @@ router.get("/profiles/:username", function(req, res) {
     });
 });
 
-// REST EDIT - GET
-router.get("/profiles/:username/edit", middleware.checkProfileOwnership, function(req, res){
-	User.findOne({username: req.params.username}, function(err, foundUser){
-		res.render("profiles/edit", {user: foundUser});
-	});
-});
-
 // REST UPDATE- PUT
 router.put("/profiles/:username", middleware.checkProfileOwnership, upload.single('image'), function(req, res){
     // checking if image file was uploaded
@@ -177,5 +170,26 @@ router.put("/profiles/:username", middleware.checkProfileOwnership, upload.singl
         });
     }
 });
+
+// REST PASSWORD UPDATE - PUT
+router.put("/profiles/:username/password", middleware.checkProfileOwnership, passport.authenticate("local", 
+    {
+        failureFlash: "Old password does not match!",
+        failureRedirect: "back"
+    }), function(req, res){
+        if (req.body.user.newPassword === req.body.user.retypePassword) {
+            User.findOne({username: req.params.username}, function(err, foundUser){
+                if (err) {
+                    req.flash("error", err.message);
+                    res.redirect("back"); 
+                }           
+                foundUser.setPassword(req.body.user.newPassword, function(){
+                    foundUser.save();
+                    req.flash("success","Successfully Changed Password!");
+                    res.redirect("back");
+                });
+            });   
+        }
+    });
 
 module.exports = router;
