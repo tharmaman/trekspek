@@ -1,0 +1,90 @@
+<% include ./partials/header %>
+
+<div class="row justify-content-center">
+	<div class="col-lg-7 text-center">
+		<form action="/reset/<%= token %>" method="POST">
+			<legend>Reset Password</legend>
+			<div class="form-group row">
+			    <label class="col-lg-4 col-form-label form-control-label">New Password</label>
+			    <div class="col-lg-6">
+			        <input class="form-control" id="password" type="password" name="password" required>
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-lg-4 col-form-label form-control-label">Retype New Password</label>
+			    <div class="col-lg-6">
+			        <input class="form-control" id="retype_password" type="password" name="confirm" required>
+			        <div id="retype_alert"></div>
+			    </div>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-success">Reset Password</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- Need to load before the script or else it won't show-->
+<script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous">
+</script>
+
+<script>
+    // adding listener to check if passwords match
+    $(function() {
+        var error_retype_password = false;
+
+        $("#retype_password").keyup(function() {
+            check_retype_password();
+        });
+        
+        $("#password").keyup(function() {
+            check_retype_password();
+        });
+
+        function check_retype_password() {
+        
+            var password = $("#password").val();
+            var retype_password = $("#retype_password").val();
+            
+            if(password === "" || retype_password === ""){
+                    $("#retype_password_group").attr("class", "form-group row")
+                    $("#retype_password").attr("class", "form-control")
+                    $("#retype_alert").text("")
+                    $("#retype_alert").attr("class", "")
+            }
+            
+            if(password != "" && retype_password != ""){
+                if(password != retype_password) {
+                    $("#retype_password_group").attr("class", "form-group has-danger")
+                    $("#retype_password").attr("class", "form-control is-invalid")
+                    $("#retype_alert").attr("class", "invalid-feedback")
+                    $("#retype_alert").text("Passwords do not match!")
+                    error_retype_password = true;
+                } else {
+                    $("#retype_password_group").attr("class", "form-group has-success")
+                    $("#retype_password").attr("class", "form-control is-valid")
+                    $("#retype_alert").attr("class", "valid-feedback")
+                    $("#retype_alert").text("Success! Passwords match!")
+                }    
+            }
+        }
+
+        $("#registration_form").submit(function() {
+                                                
+            error_retype_password = false;                                                
+            check_retype_password();
+            
+            if(error_retype_password == false){
+                return true;
+            } else {
+                return false;   
+            }
+        });
+    });
+
+</script>
+
+<% include ./partials/footer %>
