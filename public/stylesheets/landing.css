@@ -44,22 +44,22 @@ body {
 }
 
 .slideshow li:nth-child(1) { 
-  background-image: url(https://res.cloudinary.com/tharmaman/image/upload/v1530600531/tdzjir4twrh2mgffu0xg.jpg) 
+  background-image: url(../media/landing/1.jpeg) 
 }
 .slideshow li:nth-child(2) { 
-  background-image: url(../media/landing/2.jpg);
+  background-image: url(../media/landing/2.jpeg);
   animation-delay: 10s; 
 }
 .slideshow li:nth-child(3) { 
-  background-image: url(../media/landing/3.jpg);
+  background-image: url(../media/landing/3.jpeg);
   animation-delay: 20s; 
 }
 .slideshow li:nth-child(4) { 
-  background-image: url(../media/landing/4.jpg);
+  background-image: url(../media/landing/4.jpeg);
   animation-delay: 30s; 
 }
 .slideshow li:nth-child(5) { 
-  background-image: url(../media/landing/5.jpg);
+  background-image: url(../media/landing/5.jpeg);
   animation-delay: 40s; 
 }
 
