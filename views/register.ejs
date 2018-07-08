@@ -2,7 +2,7 @@
 
 <div class="row justify-content-center">
     <div style="col-md-12 text-center">
-        <form action="/register" method="post" enctype="multipart/form-data" class="form-signin">
+        <form id="registration_form" action="/register" method="post" enctype="multipart/form-data" class="form-signin">
             <h1 class="h3 mb-3 font-weight-normal">Sign Up</h1>
             <hr>
             <div class="form-group">
@@ -15,10 +15,19 @@
             </div>
             <br>
             <br>
+
             <div class="form-group">
                 <label for="password">Password</label>
-                <input class="form-control" type="password" name="password" placeholder="" required>
+                <input class="form-control" type="password" name="password" id="password" placeholder="" required>
             </div>
+
+            <div class="form-group" id="retype_password_group">
+                <label class="form-control-label" for="retype_password">Retype Password</label>
+                <input type="password" class="form-control" name="retype_password" id="retype_password" required="">
+                <div id="retype_alert"></div>
+            </div>
+
+
             <div class="form-group">
                 <label for="firstName">First Name</label>
                 <input class="form-control" type="text" name="firstName" placeholder="Severus" required>
@@ -71,6 +80,52 @@
             //replace the "Choose a file" label
             $(this).next('.custom-file-label').html(fileName);
         })
+        
+    // adding listener to check if passwords match
+
+    $(function() {
+        var error_retype_password = false;
+
+        $("#retype_password").focusout(function() {
+            check_retype_password();
+        });
+        
+        $("#password").focusout(function() {
+            check_retype_password();
+        });
+
+        function check_retype_password() {
+        
+            var password = $("#password").val();
+            var retype_password = $("#retype_password").val();
+            
+            if(password !=  retype_password) {
+                $("#retype_password_group").attr("class", "form-group has-danger")
+                $("#retype_password").attr("class", "form-control is-invalid")
+                $("#retype_alert").attr("class", "invalid-feedback")
+                $("#retype_alert").text("Passwords do not match!")
+                error_retype_password = true;
+            } else {
+                $("#retype_password_group").attr("class", "form-group has-success")
+                $("#retype_password").attr("class", "form-control is-valid")
+                $("#retype_alert").attr("class", "valid-feedback")
+                $("#retype_alert").text("Success! Passwords match!")
+            }        
+        }
+
+        $("#registration_form").submit(function() {
+                                                
+            error_retype_password = false;                                                
+            check_retype_password();
+            
+            if(error_retype_password == false){
+                return true;
+            } else {
+                return false;   
+            }
+        });
+    });
+ 
 </script>
 
 <% include ./partials/footer %>
