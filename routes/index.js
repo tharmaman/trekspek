@@ -316,6 +316,9 @@ router.put("/profiles/:username/password", middleware.checkProfileOwnership, pas
                     res.redirect("back");
                 });
             });   
+        } else {
+          req.flash("error", "New Passwords don't match!");
+          res.redirect("back");
         }
     });
 
