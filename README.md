@@ -1,5 +1,4 @@
 # TrekSpek - The Yelp for Hikers!
-==========================================================================================
 Created a fully functional web-app based on the MEN (MongoDB, Express and Node JS) Stack.
 
 Features
